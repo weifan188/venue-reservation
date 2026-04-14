@@ -18,6 +18,9 @@ const CONFIG = {
   API_KEY:   'AIzaSyDzACwhyFS6PPV7NBAbceaRQcJ8vyVxT7U',
 
   SCOPES: [
+    'openid',
+    'profile',
+    'email',
     'https://www.googleapis.com/auth/calendar.events',
     'https://www.googleapis.com/auth/calendar.readonly',
   ].join(' '),
