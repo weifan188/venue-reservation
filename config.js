@@ -14,8 +14,8 @@ const CONFIG = {
   //    - 已授權的重新導向 URI：https://<你的帳號>.github.io/<repo名稱>/
   // 5. 建立「API 金鑰」並限制只允許 Calendar API
 
-  CLIENT_ID: 'YOUR_CLIENT_ID.apps.googleusercontent.com',
-  API_KEY:   'YOUR_API_KEY',
+  CLIENT_ID: '637597173026-bsaoik6gbs98ohre0jjndd8gd8p14vnf.apps.googleusercontent.com',
+  API_KEY:   'AIzaSyDzACwhyFS6PPV7NBAbceaRQcJ8vyVxT7U',
 
   SCOPES: [
     'https://www.googleapis.com/auth/calendar.events',
@@ -33,8 +33,8 @@ const CONFIG = {
 
   VENUES: [
     {
-      id:    'VENUE_1_CALENDAR_ID@group.calendar.google.com',
-      name:  '自主教室一（行政大樓）',
+      id:    'c_4k2ecf4s3i8pab8j94ag04v4ls@group.calendar.google.com',
+      name:  '數位自主教室二（活動中心二樓）',
       color: '#4285F4',
     },
     {
