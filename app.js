@@ -35,29 +35,24 @@ const App = {
   },
 
   onGisLoad() {
-    App.tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: CONFIG.CLIENT_ID,
-      scope:     CONFIG.SCOPES,
-      callback:  (resp) => App._handleToken(resp),
-    });
     App._gisReady = true;
     App._checkReady();
   },
 
   _checkReady() {
     if (App._gapiReady && App._gisReady) {
-      // 初始化完成，登入按鈕可用
-      document.getElementById('signin-btn').disabled = false;
+      // 檢查是否從 OAuth redirect 回來（URL hash 含 access_token）
+      const hash = new URLSearchParams(window.location.hash.substring(1));
+      const token = hash.get('access_token');
+      if (token) {
+        // 清除 URL hash 避免 token 外洩
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+        gapi.client.setToken({ access_token: token });
+        App._fetchUserInfo();
+      } else {
+        document.getElementById('signin-btn').disabled = false;
+      }
     }
-  },
-
-  _handleToken(resp) {
-    if (resp.error) {
-      App.toast('登入失敗：' + resp.error, 'error');
-      return;
-    }
-    gapi.client.setToken(resp);
-    App._fetchUserInfo();
   },
 
   async _fetchUserInfo() {
@@ -85,7 +80,15 @@ const App = {
       App.toast('初始化中，請稍後再試', 'error');
       return;
     }
-    App.tokenClient.requestAccessToken({ prompt: '' });
+    // GitHub Pages 設有 COOP 標頭，改用 redirect 流程避免 popup 被封鎖
+    const redirectUri = window.location.href.split('#')[0];
+    const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
+    authUrl.searchParams.set('client_id',              CONFIG.CLIENT_ID);
+    authUrl.searchParams.set('redirect_uri',           redirectUri);
+    authUrl.searchParams.set('response_type',          'token');
+    authUrl.searchParams.set('scope',                  CONFIG.SCOPES);
+    authUrl.searchParams.set('include_granted_scopes', 'true');
+    window.location.href = authUrl.toString();
   },
 
   signOut() {
